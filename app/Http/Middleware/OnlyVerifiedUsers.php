@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Auth;
 use Closure;
 
 class OnlyVerifiedUsers
@@ -18,7 +19,12 @@ class OnlyVerifiedUsers
         if ($request->user() && $request->user()->isVerified()) {
             return $next($request);
         } else {
-            abort(403, 'You need to verify email first.');
+            Auth::logout();
+
+            $request->session()->flash('message', 'You need to verify your account and Login again.');
+            $request->session()->flash('message_status', 'brand');
+
+            return redirect()->route('login');
         }
     }
 }
