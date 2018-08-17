@@ -18,5 +18,7 @@ Route::get('/paper-work-document/{document}', function ($document) {
     abort(404, 'Not Implemented');
 })->name('paperwork.pdf');
 
+Route::get('/verify-account/{signature}/{user}', 'Auth\MailVerificationController@verify')->name('verify.email');
+
 Route::redirect('/dashboard', '/', 301)->name('dashboard');
 Route::redirect('/profile', '/', 301)->name('profile');

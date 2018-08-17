@@ -6,7 +6,7 @@
                 <div class="m-stack__item m-stack__item--left m-stack__item--middle m-stack__item--last">
                     <span class="m-footer__copyright">
                         {{ now()->format('Y') }} &copy; {{ config('app.name') }} by
-                        <a href="_" class="m-link">
+                        <a href="javascript:void;" class="m-link">
                             Walkwel Developer
                         </a>
                     </span>
@@ -14,28 +14,28 @@
                 <div class="m-stack__item m-stack__item--right m-stack__item--middle m-stack__item--first">
                     <ul class="m-footer__nav m-nav m-nav--inline m--pull-right">
                         <li class="m-nav__item">
-                            <a href="_" class="m-nav__link">
+                            <a href="javascript:void;" class="m-nav__link">
                                 <span class="m-nav__link-text">
                                     About
                                 </span>
                             </a>
                         </li>
                         <li class="m-nav__item">
-                            <a href="_" class="m-nav__link">
+                            <a href="javascript:void;" class="m-nav__link">
                                 <span class="m-nav__link-text">
                                     Privacy
                                 </span>
                             </a>
                         </li>
                         <li class="m-nav__item">
-                            <a href="_" class="m-nav__link">
+                            <a href="javascript:void;" class="m-nav__link">
                                 <span class="m-nav__link-text">
                                     T&C
                                 </span>
                             </a>
                         </li>
                         <li class="m-nav__item m-nav__item--last">
-                            <a href="_" class="m-nav__link" data-toggle="m-tooltip" title="Support Center" data-placement="right">
+                            <a href="javascript:void;" class="m-nav__link" data-toggle="m-tooltip" title="Support Center" data-placement="right">
                                 <i class="m-nav__link-icon flaticon-info m--icon-font-size-lg3"></i>
                             </a>
                         </li>

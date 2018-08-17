@@ -18,6 +18,8 @@
             <!-- END: Subheader -->
 
             <div class="m-content">
+                @include('components/alerts/session')
+
                 <form method="POST" action="{{ route('login') }}" aria-label="{{ __('Login') }}">
                     @csrf
 
