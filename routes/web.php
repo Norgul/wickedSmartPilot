@@ -10,7 +10,13 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Auth::routes();
+Route::get('/', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/paper-work-document/{document}', function ($document) {
+    abort(404, 'Not Implemented');
+})->name('paperwork.pdf');
+
+Route::redirect('/dashboard', '/', 301)->name('dashboard');
+Route::redirect('/profile', '/', 301)->name('profile');

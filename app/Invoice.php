@@ -38,6 +38,11 @@ class Invoice extends Model
         return '$' . str_pad($amount, 6, '0', STR_PAD_LEFT);   // TODO: Can do alot more than just prefixing currency statically.
     }
 
+    public function paperWorkURL()
+    {
+        return route('paperwork.pdf', $this->paper_work);
+    }
+
     public function statusClass()
     {
         switch ($this->status) {
