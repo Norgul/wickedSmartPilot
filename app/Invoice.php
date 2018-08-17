@@ -41,9 +41,11 @@ class Invoice extends Model
     public function statusClass()
     {
         switch ($this->status) {
+            case 'approve':
             case 'approved':
                 return 'success';
 
+            case 'reject':
             case 'rejected':
                 return 'danger';
 
