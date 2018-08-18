@@ -5,6 +5,7 @@
     </button>
     <div id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas  m-header-menu--skin-dark m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-light m-aside-header-menu-mobile--submenu-skin-light ">
         <ul class="m-menu__nav  m-menu__nav--submenu-arrow ">
+            @auth
             <li class="m-menu__item  @if(in_array(Route::currentRouteName(), ['root', 'home', 'dashboard'])) m-menu__item--active @endif" aria-haspopup="true">
                 <a href="{{ route('home') }}" class="m-menu__link ">
                     <span class="m-menu__item-here"></span>
@@ -13,6 +14,15 @@
                     </span>
                 </a>
             </li>
+            <li class="m-menu__item  @if(in_array(Route::currentRouteName(), ['invoices.index'])) m-menu__item--active @endif" aria-haspopup="true">
+                <a href="{{ route('invoices.index') }}" class="m-menu__link ">
+                    <span class="m-menu__item-here"></span>
+                    <span class="m-menu__link-text">
+                        Invoices
+                    </span>
+                </a>
+            </li>
+            @endif
             @guest
             <li class="m-menu__item @if('login' === Route::currentRouteName()) m-menu__item--active @endif" aria-haspopup="true">
                 <a href="{{ route('login') }}" class="m-menu__link ">
