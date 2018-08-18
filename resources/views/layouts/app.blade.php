@@ -28,7 +28,6 @@
 
         @yield('content')
 
-        @include('components/footer/container')
     </div>
     <!-- end:: Page -->
 
