@@ -118,7 +118,7 @@
                                 Invoices
                             @endslot
                             <div class="row">
-                                <div class="col-md-12 my-4">
+                                <div class="col-md-11 my-4">
                                     <div class="m-input-icon m-input-icon--left">
                                         <input type="text" class="form-control form-control-lg m-input m-input--solid" placeholder="Search..." id="invoice-search"
                                             name="search">
@@ -128,6 +128,17 @@
                                             </span>
                                         </span>
                                     </div>
+                                </div>
+                                <div class="col-md-1 my-4">
+                                    <button     onclick="downloadTableData()"
+                                                class="btn btn-outline-success btn-lg m-btn "
+                                                data-container="body"
+                                                data-toggle="m-popover"
+                                                data-placement="top"
+                                                data-content="Export Table Data"
+                                        >
+                                        <i class="fa flaticon-download"></i>
+                                    </button>
                                 </div>
                             </div>
                             <div class="row">
@@ -430,11 +441,33 @@
     </script>
     <script src="{{ asset('/vendors/custom/chartist/chartist-plugin-tooltip.min.js') }}">
     </script>
+    <script src="{{ asset('/vendors/custom/jsontocsv/jsontocsv.js') }}">
+    </script>
     <script>
 
+        let excelData = [];
         function updateChart(data) {
             statChart.update(data.chart.content);
+            excelData = data.data.map( function (item) {
+                    return {
+                        id:             item.id,
+                        cost:           item.cost,
+                        weight:         item.weight,
+                        costPerLB:      item.cost_per_unit,
+                        destination:    item.destination.name,
+                        origin:         item.origin.name,
+                        created_at:     item.created_at,
+                        updated_at:     item.updated_at,
+                        status:         item.status
+                    };
+                }
+            );
             chartMax = data.chart.max;
+        }
+
+        function downloadTableData()
+        {
+            JSONToCSVConvertor(excelData,"Invoices Report - " + (new Date()).toISOString(), true);
         }
 
         var data = {
