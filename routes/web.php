@@ -22,3 +22,5 @@ Route::get('/verify-account/{signature}/{user}', 'Auth\MailVerificationControlle
 
 Route::redirect('/dashboard', '/', 301)->name('dashboard');
 Route::redirect('/profile', '/', 301)->name('profile');
+
+Route::post('/invoices', 'InvoicesController@fetch')->name('invoices.fetch');
