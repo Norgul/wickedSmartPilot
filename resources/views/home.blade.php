@@ -18,38 +18,114 @@
             <!-- END: Subheader -->
 
             <div class="m-content">
-                <!--Begin::Section-->
                 <div class="row">
                     <div class="col-xl-12">
-                        <!--begin:: Widgets/Invoices-->
-                        <div class="m-portlet m-portlet--full-height ">
-                            <div class="m-portlet__head">
-                                <div class="m-portlet__head-caption">
-                                    <div class="m-portlet__head-title">
-                                        <h3 class="m-portlet__head-text">
-                                            Invoices
-                                        </h3>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="m-portlet__body">
-                                <div class="row">
-                                    <div class="col-md-12 my-4">
-                                        <div class="m-input-icon m-input-icon--left">
-                                            <input type="text" class="form-control form-control-lg m-input m-input--solid" placeholder="Search..." id="invoice-search" name="search" >
-                                            <span class="m-input-icon__icon m-input-icon__icon--left">
-                                                <span><i class="la la-search"></i></span>
+                        @component('components/portlet')
+                            @slot('title')
+                                Stats
+                            @endslot
+
+                            <div class="m-widget1">
+                                <div class="m-widget1__item">
+                                    <div class="row m-row--no-padding align-items-center">
+                                        <div class="col">
+                                            <h3 class="m-widget1__title">
+                                                Invoices
+                                            </h3>
+                                            <span class="m-widget1__desc">
+                                                Total
+                                            </span>
+                                        </div>
+                                        <div class="col m--align-right">
+                                            <span class="m-widget1__number m--font-brand">
+                                                {{ $stats['total_invoices'] }}
                                             </span>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div id="invoices-table"></div>
+                                <div class="m-widget1__item">
+                                    <div class="row m-row--no-padding align-items-center">
+                                        <div class="col">
+                                            <h3 class="m-widget1__title">
+                                                Weight
+                                            </h3>
+                                            <span class="m-widget1__desc">
+                                                Calculated <small>based on all Invoices</small>
+                                            </span>
+                                        </div>
+                                        <div class="col m--align-right">
+                                            <span class="m-widget1__number m--font-brand">
+                                                {{ $stats['total_weight'] }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-widget1__item">
+                                    <div class="row m-row--no-padding align-items-center">
+                                        <div class="col">
+                                            <h3 class="m-widget1__title">
+                                                Cost
+                                            </h3>
+                                            <span class="m-widget1__desc">
+                                                Calculated <small>based on all Invoices</small>
+                                            </span>
+                                        </div>
+                                        <div class="col m--align-right">
+                                            <span class="m-widget1__number m--font-success">
+                                                {{ $stats['total_cost']}}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="m-widget1__item">
+                                    <div class="row m-row--no-padding align-items-center">
+                                        <div class="col">
+                                            <h3 class="m-widget1__title">
+                                                Cost Per LBS
+                                            </h3>
+                                            <span class="m-widget1__desc">
+                                                Average Calculated <small>based on all Invoices</small>
+                                            </span>
+                                        </div>
+                                        <div class="col m--align-right">
+                                            <span class="m-widget1__number m--font-success">
+                                                {{ $stats['total_cost_per_unit']}}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @endcomponent
+                    </div>
+                </div>
+                <!--Begin::Section-->
+                <div class="row">
+                    <div class="col-xl-12">
+                        <!--begin:: Widgets/Invoices-->
+                        @component('components/portlet')
+                            @slot('title')
+                                Invoices
+                            @endslot
+                            <div class="row">
+                                <div class="col-md-12 my-4">
+                                    <div class="m-input-icon m-input-icon--left">
+                                        <input type="text" class="form-control form-control-lg m-input m-input--solid" placeholder="Search..." id="invoice-search"
+                                            name="search">
+                                        <span class="m-input-icon__icon m-input-icon__icon--left">
+                                            <span>
+                                                <i class="la la-search"></i>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div id="invoices-table"></div>
+                                </div>
+                            </div>
+                        @endcomponent
                         <!--end:: Widgets/Invoices-->
                     </div>
                 </div>
