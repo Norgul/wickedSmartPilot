@@ -15,8 +15,9 @@ class InvoiceResource extends JsonResource
      */
     public function toArray($request)
     {
-        $response                 = parent::toArray($request);
-        $response['status_class'] = $this->statusClass();
+        $response                  = parent::toArray($request);
+        $response['status_class']  = $this->statusClass();
+        $response['paperwork_url'] = $this->paperWorkURL();
 
         $options = '';
 

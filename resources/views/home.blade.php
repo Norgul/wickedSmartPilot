@@ -285,7 +285,21 @@
         }, {
             field: 'paper_work',
             title: 'View Paperwork',
-            template: '@{{paperwork_url}}'
+            textAlign: 'center',
+            template: function (row) {
+                if (row.paper_work) {
+                    return `
+                        <button onclick="viewpdf(this)"
+                                data-href="${row.paperwork_url}"
+                                class="btn m-btn--square btn-sm btn-outline-brand m-btn m-btn--custom m-btn--icon m-btn--icon-only"
+                                >
+                                <i class="la la-file-pdf-o"/>
+                        </button>
+                    `;
+                } else {
+                    return '';
+                }
+            }
         }, {
             field: 'status',
             title: 'Status',
@@ -394,6 +408,12 @@
                 target.show();
             });
         });
+    }
+
+    function viewpdf(element) {
+        const target = $(element);
+
+        window.open(target.data('href'),'PDF Viewer','height=800,width=500,top=150,left=300')
     }
 
 </script>
