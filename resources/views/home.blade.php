@@ -195,7 +195,7 @@
             sortable: 'asc',
             template: '@{{cost_per_unit}}'
         }, {
-            field: 'paperwork',
+            field: 'paper_work',
             title: 'View Paperwork',
             template: '@{{paperwork_url}}'
         }, {
