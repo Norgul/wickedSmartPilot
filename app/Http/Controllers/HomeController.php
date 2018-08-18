@@ -24,8 +24,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::paginate();
-
-        return view('home', compact(['invoices']));
+        return view('home');
     }
 }
