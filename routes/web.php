@@ -24,3 +24,4 @@ Route::redirect('/dashboard', '/', 301)->name('dashboard');
 Route::redirect('/profile', '/', 301)->name('profile');
 
 Route::post('/invoices', 'InvoicesController@fetch')->name('invoices.fetch');
+Route::post('/invoices/change-status', 'InvoicesController@updateStatus')->name('invoices.status');

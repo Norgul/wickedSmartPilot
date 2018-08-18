@@ -36,6 +36,13 @@
 
     <script>
         let token = document.head.querySelector('meta[name="csrf-token"]');
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
     </script>
     @stack('scripts')
 </body>

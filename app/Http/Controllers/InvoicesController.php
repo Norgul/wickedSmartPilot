@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Invoice;
 use App\Http\Resources\InvoiceResource;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 
 class InvoicesController extends Controller
@@ -38,5 +39,23 @@ class InvoicesController extends Controller
                     ]);
 
         return $resource;
+    }
+
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'id'     => 'required|exists:invoices',
+            'status' => [
+                'required',
+                Rule::in(Invoice::availableStatuses()),
+            ],
+        ]);
+
+        $invoice = Invoice::find($request->input('id'));
+
+        $invoice->status = $request->input('status');
+        $invoice->save();
+
+        return new InvoiceResource($invoice);
     }
 }

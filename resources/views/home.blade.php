@@ -34,8 +34,13 @@
                             </div>
                             <div class="m-portlet__body">
                                 <div class="row">
-                                    <div class="col-md-6 my-4">
-                                        <input type="text" id="invoice-search" name="search" placeholder="Search Invoice" class="form-control m-input m-input--air m-input--pill">
+                                    <div class="col-md-12 my-4">
+                                        <div class="m-input-icon m-input-icon--left">
+                                            <input type="text" class="form-control form-control-lg m-input m-input--solid" placeholder="Search..." id="invoice-search" name="search" >
+                                            <span class="m-input-icon__icon m-input-icon__icon--left">
+                                                <span><i class="la la-search"></i></span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -197,6 +202,16 @@
             field: 'status',
             title: 'Status',
             sortable: 'asc',
+            template: function (row) {
+                return `
+                <button onclick="changeStatus(this)" data-invoice-id="${row.id}" data-status="${row.status}" data-status_class=${row.status_class} class="btn btn-sm m-btn--wide m-btn--pill btn-${row.status_class} invoice-status invoice-status--${row.id}">
+                    ${row.status}
+                </button>
+                <select class="${row.status_class} invoice-statuses" style="display:none;">
+                    ${row.status_options}
+                </select>
+                `;
+            }
         }],
 
         toolbar: {
@@ -258,6 +273,41 @@
             }
         }
     };
+
     var datatable = $('#invoices-table').mDatatable(options);
+
+    function changeStatus(element) {
+        const target = $(element);
+        const statusChanger = target.siblings('select');
+        const prevStatusClass = target.data('status_class');
+
+        $('button.invoice-status').show();
+        target.hide();
+
+        $('select.invoice-statuses').hide();
+        statusChanger.show();
+
+        statusChanger.unbind('change');
+        statusChanger.on('change', function (event) {
+            const statusElement = $(event.target);
+
+            $.post("{{ route('invoices.status') }}", {
+                id: target.data('invoice-id'),
+                status: statusElement.val(),
+            }, function(response) {
+
+                target.removeClass(`btn-${prevStatusClass}`);
+                target.text(response.data.status);
+                target.addClass(`btn-${response.data.status_class}`);
+                target.data('status', response.data.status);
+                target.data('status_class', response.data.status_class);
+
+                statusChanger.hide();
+                target.show();
+            });
+
+        });
+    }
+
 </script>
 @endpush

@@ -98,6 +98,7 @@ class Invoice extends Model
         $query->where('id', 'like', '%' . $search . '%');
         $query->orWhere('weight', 'like', $search . '%');
         $query->orWhere('cost', 'like', $search . '%');
+        $query->orWhere('status', 'like', $search . '%');
 
         $query->orWhereHas('destination', function ($innerQuery) use ($search) {
             $innerQuery->search($search);
