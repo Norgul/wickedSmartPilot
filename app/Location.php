@@ -25,4 +25,15 @@ class Location extends Model
     }
 
     //endregion Relationships
+
+    //region Local Scopes
+
+    public function scopeSearch($query, $search)
+    {
+        $query->where('name', 'like', '%' . $search . '%');
+
+        return $query;
+    }
+
+    //endregion Local Scopes
 }

@@ -93,6 +93,23 @@ class Invoice extends Model
         return $query;
     }
 
+    public function scopeSearch($query, $search)
+    {
+        $query->where('id', 'like', '%' . $search . '%');
+        $query->orWhere('weight', 'like', $search . '%');
+        $query->orWhere('cost', 'like', $search . '%');
+
+        $query->orWhereHas('destination', function ($innerQuery) use ($search) {
+            $innerQuery->search($search);
+        });
+
+        $query->orWhereHas('origin', function ($innerQuery) use ($search) {
+            $innerQuery->search($search);
+        });
+
+        return $query;
+    }
+
     //endregion Local Scopes
 
     //region Static Methods
