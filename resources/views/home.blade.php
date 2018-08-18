@@ -19,7 +19,17 @@
 
             <div class="m-content">
                 <div class="row">
-                    <div class="col-xl-12">
+
+                    <div class="col-xl-6">
+                        @component('components/portlet')
+                            @slot('title')
+                                Graphs
+                            @endslot
+                            <div id="stats-chart" class="ct-chart ct-perfect-fourth"></div>
+                        @endcomponent
+                    </div>
+
+                    <div class="col-xl-6">
                         @component('components/portlet')
                             @slot('title')
                                 Stats
@@ -162,11 +172,13 @@
                         'X-CSRF-TOKEN': token.content,
                     },
                     map: function (raw) {
-                        // sample data mapping
                         var dataSet = raw;
                         if (typeof raw.data !== 'undefined') {
                             dataSet = raw.data;
                         }
+
+                        updateChart(raw);
+
                         return dataSet;
                     },
                 }
@@ -381,9 +393,55 @@
                 statusChanger.hide();
                 target.show();
             });
-
         });
     }
 
 </script>
+@endpush
+
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('/vendors/custom/chartist/chartist.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('/vendors/custom/chartist/chartist-plugin-tooltip.css') }}">
+@endpush
+
+@push('scripts')
+    <script src="{{ asset('/vendors/custom/chartist/chartist.min.js') }}">
+    </script>
+    <script src="{{ asset('/vendors/custom/chartist/chartist-plugin-tooltip.min.js') }}">
+    </script>
+    <script>
+
+        function updateChart(data) {
+            statChart.update(data.chart.content);
+            chartMax = data.chart.max;
+        }
+
+        var data = {
+        };
+        var max = 7;
+
+        var options = {
+            plugins: [
+                Chartist.plugins.tooltip()
+            ]
+        };
+
+        // Create a new line chart object where as first parameter we pass in a selector
+        // that is resolving to our chart container element. The Second parameter
+        // is the actual data object.
+        const statChart = new Chartist.Bar('#stats-chart', data, options);
+
+        // This is the bit we are actually interested in. By registering a callback for `draw` events, we can actually intercept the drawing process of each element on the chart.
+        statChart.on('draw', function(context) {
+            // First we want to make sure that only do something when the draw event is for bars. Draw events do get fired for labels and grids too.
+            if(context.type === 'bar') {
+                // With the Chartist.Svg API we can easily set an attribute on our bar that just got drawn
+                context.element.attr({
+                    // Now we set the style attribute on our bar to override the default color of the bar. By using a HSL colour we can easily set the hue of the colour dynamically while keeping the same saturation and lightness. From the context we can also get the current value of the bar. We use that value to calculate a hue between 0 and 100 degree. This will make our bars appear green when close to the maximum and red when close to zero.
+                    style: 'stroke: hsl(' + Math.floor(Chartist.getMultiValue(context.value) / max * 100) + ', 50%, 50%);'
+                });
+            }
+        });
+    </script>
 @endpush

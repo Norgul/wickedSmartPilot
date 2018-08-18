@@ -29,12 +29,42 @@ class InvoicesController extends Controller
                         )
                         ->paginate($request->input('datatable.pagination.perpage'));
 
+        $chartData = $invoices->groupBy(function ($item, $key) {
+            return $item->origin->name . ' to ' . $item->destination->name;
+        })
+        ->map(function ($chart) {
+            $element['weight'] = $chart->sum('weight');
+            $element['cost'] = $chart->sum('cost');
+
+            $cpu = $element['cost'] / $element['weight'];
+
+            $element['cost_per_unit'] = round($cpu, 2);
+
+            return $element;
+        });
+
+        $chartContent = [
+            'lables' => $chartData->keys()->all(),
+            'series' => [
+                $chartData->map(function ($item, $key) {
+                    return [
+                        'meta'  => $key,
+                        'value' => $item['cost_per_unit'],
+                    ];
+                })->values()->all(),
+            ],
+        ];
+
         $resource = (InvoiceResource::collection($invoices))
                     ->additional([
                         'meta' => [
                             'page'    => $invoices->currentPage(),
                             'pages'   => $invoices->lastPage(),
                             'perpage' => $invoices->perPage(),
+                        ],
+                        'chart' => [
+                            'content' => $chartContent,
+                            'max'     => $chartData->max('cost_per_unit'),
                         ],
                     ]);
 
