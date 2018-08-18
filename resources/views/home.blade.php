@@ -369,7 +369,7 @@
                             input: 'Page number',
                             select: 'Select page size'
                         },
-                        info: 'Displaying @{{start}} - @{{end}} of @{{total}} records'
+                        info: 'Total @{{total}} records'
                     }
                 }
             }
