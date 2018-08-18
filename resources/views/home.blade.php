@@ -320,7 +320,7 @@
                 <button onclick="changeStatus(this)" data-invoice-id="${row.id}" data-status="${row.status}" data-status_class=${row.status_class} class="btn btn-sm m-btn--wide m-btn--pill btn-${row.status_class} invoice-status invoice-status--${row.id}">
                     ${row.status}
                 </button>
-                <select class="${row.status_class} invoice-statuses" style="display:none;">
+                <select class="${row.status_class} form-control invoice-statuses" style="display:none;">
                     ${row.status_options}
                 </select>
                 `;
