@@ -224,9 +224,11 @@
             template: function (row) {
                 if (row.paper_work) {
                     return `
-                        <button onclick="viewpdf(this)"
+                        <button
                                 data-href="${row.paperwork_url}"
                                 class="btn m-btn--square btn-sm btn-outline-brand m-btn m-btn--custom m-btn--icon m-btn--icon-only"
+                                data-toggle="modal"
+                                data-target="#modal-pdf_viewer"
                                 >
                                 <i class="la la-file-pdf-o"/>
                         </button>
@@ -421,4 +423,81 @@
             }
         });
     </script>
+@endpush
+
+
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/wicked-spinner.css') }}">
+<style>
+    .modal-content .modal-header.dark, .modal-body.dark {
+        background: #35393C;
+        color: white;
+    }
+
+    .modal-content .modal-header.dark .modal-title {
+        color: white;
+    }
+
+    .spinner {
+        text-align: center;
+        align-content: center;
+    }
+</style>
+@endpush
+
+@push('scripts')
+<div class="modal fade" id="modal-pdf_viewer" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header dark">
+                <h5 class="modal-title">Invoice Paper Work</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body dark">
+                <div class="pdf-container"></div>
+                <div class="spinner">
+                    <div class="wicked-ring"><div></div><div></div><div></div><div></div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#modal-pdf_viewer').on('shown.bs.modal', function (event) {
+        const button = $(event.relatedTarget);
+        const body = $('#modal-pdf_viewer').find('.modal-body');
+
+        let frame = body.find('.pdf-container');
+        let spinner = body.find('.spinner');
+
+        frame.hide();
+        spinner.show();
+
+        frame.html(`<iframe src="${button.data('href')}" frameborder="0" width="750px" height="700px"</iframe>`);
+
+        frame.children('iframe').unbind().on('load', function () {
+            // load spinner hide
+            spinner.hide();
+            frame.show();
+        });
+    });
+    $('#modal-pdf_viewer').on('hidden.bs.modal', function (event) {
+        const body = $('#modal-pdf_viewer').find('.modal-body');
+
+        let frame = body.find('.pdf-container');
+        let spinner = body.find('.spinner');
+
+        frame.hide();
+        spinner.show();
+
+        frame.html('');
+    });
+
+
+
+</script>
+
 @endpush
