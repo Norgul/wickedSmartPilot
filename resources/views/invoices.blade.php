@@ -65,6 +65,42 @@
                                     </button>
                                 </div>
                             </div>
+                            <div class="my-2">
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="origin_id">Origin</label>
+                                        <select name="origin_id" id="origin_id" data-filter-key="origin" class="form-control select2 m-input" multiple></select>
+                                    </div>
+                                    <div class="col-md-4 mx-4">
+                                        <label for="destination_id">Destination</label>
+                                        <select name="destination_id" id="destination_id" data-filter-key="destination" class="form-control select2 m-input" multiple></select>
+                                    </div>
+                                    <div class="col-md-3 pull-right">
+                                        <label for="">Apply Filters</label>
+                                        <button class="btn btn-warning btn-block m-btn m-btn--icon" onclick="applyFiltersAndQuery()">
+                                            <i class="fa fa-filter"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <label for="weight">Weight</label>
+                                        <select name="weight" id="weight" data-filter-key="weight" class="form-control select2 m-input" multiple></select>
+                                    </div>
+                                    <div class="col-md-4 mx-4">
+                                        <label for="cost">Cost</label>
+                                        <select name="cost" id="cost" data-filter-key="cost" class="form-control select2 m-input" multiple></select>
+                                    </div>
+                                    <div class="col-md-3 pull-right">
+                                        <label for="">Reset Filters</label>
+                                        <button class="btn btn-info btn-block m-btn m-btn--icon" onclick="resetFiltersAndQuery()">
+                                            <i class="fa fa-refresh"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="row">
                                 <div class="col-md-12">
                                     <div id="invoices-table"></div>
@@ -113,6 +149,7 @@
                         }
 
                         updateChart(raw);
+                        updateFilters(raw);
 
                         return dataSet;
                     },
@@ -498,6 +535,47 @@
 
 
 
+</script>
+
+@endpush
+
+
+@push('scripts')
+
+<script>
+    const filterInputs = $('select.select2').select2();
+
+    function updateFilters(dataFromServer) {
+        filterInputs.each(function (index, element) {
+            const queryElement = $(element);
+
+            queryElement.empty().select2({
+                data: dataFromServer.filters.allowed[queryElement.data('filter-key')].options
+            });
+
+            queryElement.val(dataFromServer.filters.applied[queryElement.attr('name')]).trigger('change');
+        });
+    }
+
+    function applyFiltersAndQuery() {
+        let queryParams = datatable.getDataSourceQuery();
+        queryParams['filters'] = {
+            destination_id : $('select[name="destination_id"]').val(),
+            origin_id : $('select[name="origin_id"]').val(),
+            cost : $('select[name="cost"]').val(),
+            weight : $('select[name="weight"]').val(),
+        };
+
+        datatable.setDataSourceQuery(queryParams);
+        datatable.reload();
+    }
+
+    function resetFiltersAndQuery() {
+        let queryParams = datatable.getDataSourceQuery();
+        queryParams['filters'] = {};
+        datatable.setDataSourceQuery(queryParams);
+        datatable.reload();
+    }
 </script>
 
 @endpush

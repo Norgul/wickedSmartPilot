@@ -111,6 +111,17 @@ class Invoice extends Model
         return $query;
     }
 
+    public function scopeFilter($query, $filters)
+    {
+        if (is_array($filters)) {
+            foreach ($filters as $filter => $values) {
+                $query->whereIn($filter, $values);
+            }
+        }
+
+        return $query;
+    }
+
     //endregion Local Scopes
 
     //region Static Methods

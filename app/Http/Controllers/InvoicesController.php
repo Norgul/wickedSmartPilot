@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Invoice;
+use App\Location;
 use App\Http\Resources\InvoiceResource;
 use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
@@ -52,6 +53,19 @@ class InvoicesController extends Controller
             $queryBuilder->search($searchParam);
         }
 
+        $appliedFilters   = $request->input('datatable.query.filters');
+
+        if (!$appliedFilters) {
+            $appliedFilters = [
+                'destination_id' => [],
+                'origin_id'      => [],
+                'cost'           => [],
+                'weight'         => [],
+            ];
+        } else {
+            $queryBuilder->filter($appliedFilters);
+        }
+
         $invoices = $queryBuilder
                         ->orderBy(
                             $request->input('datatable.sort.field', 'id'),
@@ -85,6 +99,56 @@ class InvoicesController extends Controller
             ],
         ];
 
+        $availableFilters = [];
+
+        $availableCosts = Invoice::groupBy('cost')->pluck('cost')->map(function ($item) {
+            return [
+                'id'   => $item,
+                'name' => $item,
+                'text' => $item,
+            ];
+        });
+
+        $availableFilters['cost'] = [
+            'label'   => 'Cost',
+            'column'  => 'cost',
+            'options' => $availableCosts,
+        ];
+
+        $availableWeights = Invoice::groupBy('weight')->pluck('weight')->map(function ($item) {
+            return [
+                'id'   => $item,
+                'name' => $item,
+                'text' => $item,
+            ];
+        });
+        $availableFilters['weight'] = [
+            'label'   => 'weight',
+            'column'  => 'weight',
+            'options' => $availableWeights,
+        ];
+
+        $locations              = Location::all();
+        $availableLocations     = $locations->map(function ($location) {
+            return [
+                'id'   => $location['id'],
+                'name' => $location['name'],
+                'text' => $location['name'],
+            ];
+        });
+
+        $availableFilters['destination'] = [
+            'label'   => 'Destination',
+            'column'  => 'destination_id',
+            'options' => $availableLocations,
+        ];
+
+        $availableFilters['origin'] = [
+            'label'   => 'Origin',
+            'column'  => 'origin_id',
+            'options' => $availableLocations,
+        ];
+
         $resource = (InvoiceResource::collection($invoices))
                     ->additional([
                         'meta' => [
@@ -95,6 +159,10 @@ class InvoicesController extends Controller
                         'chart' => [
                             'content' => $chartContent,
                             'max'     => $chartData->max('cost_per_unit'),
+                        ],
+                        'filters' => [
+                            'allowed' => $availableFilters,
+                            'applied' => $appliedFilters,
                         ],
                     ]);
 
